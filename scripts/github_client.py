@@ -1,32 +1,23 @@
-from github import Github
+from github import Github, Auth
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
-load_dotenv()
+# Project root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Read values from .env
+# Load .env
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
 TOKEN = os.getenv("GITHUB_TOKEN")
 OWNER = os.getenv("OWNER")
 REPO = os.getenv("REPO")
 
-# Check if token exists
-if not TOKEN:
-    raise Exception("GitHub token not found! Check your .env file.")
 
-# Connect to GitHub
-g = Github(TOKEN)
+def get_repo():
+    """
+    Returns the authenticated GitHub repository object.
+    """
+    auth = Auth.Token(TOKEN)
+    g = Github(auth=auth)
 
-# Access the repository
-repo = g.get_repo(f"{OWNER}/{REPO}")
-
-print("=" * 50)
-print("✅ Connected to GitHub Successfully")
-print("=" * 50)
-
-print(f"Repository Name : {repo.name}")
-print(f"Owner           : {repo.owner.login}")
-print(f"Default Branch  : {repo.default_branch}")
-print(f"Stars           : {repo.stargazers_count}")
-print(f"Forks           : {repo.forks_count}")
-print(f"Open Issues     : {repo.open_issues_count}")
+    return g.get_repo(f"{OWNER}/{REPO}")

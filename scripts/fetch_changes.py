@@ -12,10 +12,9 @@ with open(last_commit_file, "r") as f:
 
 latest_commit = repo.get_commits()[0].sha
 
-print(f"Previous Commit : {previous_commit}")
-print(f"Latest Commit   : {latest_commit}")
+print("Repository      :", repo.full_name)
+print("Previous Commit :", previous_commit)
+print("Latest Commit   :", latest_commit)
 
-if previous_commit == latest_commit:
-    print("\nNo new commits found.")
-else:
-    print("\nNew commit detected!")
+# Stop here
+exit()

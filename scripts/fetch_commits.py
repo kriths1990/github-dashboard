@@ -1,20 +1,7 @@
-from github import Github
-from dotenv import load_dotenv
-import os
+from github_client import get_repo
 
-# Load .env
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+repo = get_repo()
 
-TOKEN = os.getenv("GITHUB_TOKEN")
-OWNER = os.getenv("OWNER")
-REPO = os.getenv("REPO")
-
-# Connect to GitHub
-g = Github(TOKEN)
-repo = g.get_repo(f"{OWNER}/{REPO}")
-
-# Fetch latest commits
 commits = repo.get_commits()
 
 print("=" * 80)

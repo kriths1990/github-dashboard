@@ -1,0 +1,737 @@
+{
+    "repository": "kriths1990/github-dashboard",
+    "branch": "main",
+    "latest_commit": "dbedf148371f1ac71cb8c7987793869efb82ed36",
+    "previous_commit": "a4ffcb6a9e5bc20b21e64487714e52a8f697feba",
+    "author": "Kriths2430",
+    "author_email": "Krithrav1990@gmail.com",
+    "message": "Updated README",
+    "commit_time": "2026-07-19 14:37:02+00:00",
+    "pipeline_time": "19-07-2026 20:47:33",
+    "files": [
+        {
+            "filename": ".github/workflows/dashboard.yml",
+            "status": "modified",
+            "additions": 1,
+            "deletions": 0,
+            "changes": 1,
+            "patch": "@@ -0,0 +1 @@\n+"
+        },
+        {
+            "filename": ".gitignore",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "patch": "@@ -0,0 +1,4 @@\n+venv/\n+__pycache__/\n+.env\n+*.pyc\n\\ No newline at end of file"
+        },
+        {
+            "filename": "README.md",
+            "status": "modified",
+            "additions": 1,
+            "deletions": 0,
+            "changes": 1,
+            "patch": "@@ -0,0 +1 @@\n+## GitHub Change Dashboard Project\n\\ No newline at end of file"
+        },
+        {
+            "filename": "reports/last_commit.txt",
+            "status": "modified",
+            "additions": 0,
+            "deletions": 1,
+            "changes": 1,
+            "patch": "@@ -1 +0,0 @@\n-    \n\\ No newline at end of file"
+        },
+        {
+            "filename": "scripts/compare_commits.py",
+            "status": "added",
+            "additions": 43,
+            "deletions": 0,
+            "changes": 43,
+            "patch": "@@ -0,0 +1,43 @@\n+from github import Github\n+from dotenv import load_dotenv\n+import os\n+\n+# -----------------------------\n+# Load Environment Variables\n+# -----------------------------\n+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n+load_dotenv(os.path.join(BASE_DIR, \".env\"))\n+\n+TOKEN = os.getenv(\"GITHUB_TOKEN\")\n+OWNER = os.getenv(\"OWNER\")\n+REPO = os.getenv(\"REPO\")\n+\n+# -----------------------------\n+# Connect to GitHub\n+# -----------------------------\n+g = Github(TOKEN)\n+repo = g.get_repo(f\"{OWNER}/{REPO}\")\n+\n+# -----------------------------\n+# Read Previous Commit\n+# -----------------------------\n+last_commit_file = os.path.join(BASE_DIR, \"reports\", \"last_commit.txt\")\n+\n+with open(last_commit_file, \"r\") as f:\n+    previous_commit = f.read().strip()\n+\n+# -----------------------------\n+# Get Latest Commit\n+# -----------------------------\n+latest_commit = repo.get_commits()[0].sha\n+\n+print(f\"Previous Commit : {previous_commit}\")\n+print(f\"Latest Commit   : {latest_commit}\")\n+\n+# -----------------------------\n+# Compare\n+# -----------------------------\n+if previous_commit == latest_commit:\n+    print(\"\\nNo new commits found.\")\n+else:\n+    print(\"\\nNew commit detected!\")\n\\ No newline at end of file"
+        },
+        {
+            "filename": "scripts/fetch_commits.py",
+            "status": "added",
+            "additions": 29,
+            "deletions": 0,
+            "changes": 29,
+            "patch": "@@ -0,0 +1,29 @@\n+from github import Github\n+from dotenv import load_dotenv\n+import os\n+\n+# Load .env\n+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n+load_dotenv(os.path.join(BASE_DIR, \".env\"))\n+\n+TOKEN = os.getenv(\"GITHUB_TOKEN\")\n+OWNER = os.getenv(\"OWNER\")\n+REPO = os.getenv(\"REPO\")\n+\n+# Connect to GitHub\n+g = Github(TOKEN)\n+repo = g.get_repo(f\"{OWNER}/{REPO}\")\n+\n+# Fetch latest commits\n+commits = repo.get_commits()\n+\n+print(\"=\" * 80)\n+print(\"LATEST COMMITS\")\n+print(\"=\" * 80)\n+\n+for commit in commits[:10]:\n+    print(f\"Commit SHA : {commit.sha}\")\n+    print(f\"Author     : {commit.commit.author.name}\")\n+    print(f\"Date       : {commit.commit.author.date}\")\n+    print(f\"Message    : {commit.commit.message}\")\n+    print(\"-\" * 80)\n\\ No newline at end of file"
+        },
+        {
+            "filename": "scripts/github_client.py",
+            "status": "modified",
+            "additions": 32,
+            "deletions": 0,
+            "changes": 32,
+            "patch": "@@ -0,0 +1,32 @@\n+from github import Github\n+from dotenv import load_dotenv\n+import os\n+\n+# Load environment variables\n+load_dotenv()\n+\n+# Read values from .env\n+TOKEN = os.getenv(\"GITHUB_TOKEN\")\n+OWNER = os.getenv(\"OWNER\")\n+REPO = os.getenv(\"REPO\")\n+\n+# Check if token exists\n+if not TOKEN:\n+    raise Exception(\"GitHub token not found! Check your .env file.\")\n+\n+# Connect to GitHub\n+g = Github(TOKEN)\n+\n+# Access the repository\n+repo = g.get_repo(f\"{OWNER}/{REPO}\")\n+\n+print(\"=\" * 50)\n+print(\"\u2705 Connected to GitHub Successfully\")\n+print(\"=\" * 50)\n+\n+print(f\"Repository Name : {repo.name}\")\n+print(f\"Owner           : {repo.owner.login}\")\n+print(f\"Default Branch  : {repo.default_branch}\")\n+print(f\"Stars           : {repo.stargazers_count}\")\n+print(f\"Forks           : {repo.forks_count}\")\n+print(f\"Open Issues     : {repo.open_issues_count}\")\n\\ No newline at end of file"
+        }
+    ],
+    "line_changes": [
+        {
+            "file": ".github/workflows/dashboard.yml",
+            "type": "Added",
+            "line": 1,
+            "content": ""
+        },
+        {
+            "file": ".gitignore",
+            "type": "Added",
+            "line": 1,
+            "content": "venv/"
+        },
+        {
+            "file": ".gitignore",
+            "type": "Added",
+            "line": 2,
+            "content": "__pycache__/"
+        },
+        {
+            "file": ".gitignore",
+            "type": "Added",
+            "line": 3,
+            "content": ".env"
+        },
+        {
+            "file": ".gitignore",
+            "type": "Added",
+            "line": 4,
+            "content": "*.pyc"
+        },
+        {
+            "file": "README.md",
+            "type": "Added",
+            "line": 1,
+            "content": "## GitHub Change Dashboard Project"
+        },
+        {
+            "file": "reports/last_commit.txt",
+            "type": "Removed",
+            "line": 1,
+            "content": "    "
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 1,
+            "content": "from github import Github"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 2,
+            "content": "from dotenv import load_dotenv"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 3,
+            "content": "import os"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 4,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 5,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 6,
+            "content": "# Load Environment Variables"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 7,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 8,
+            "content": "BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 9,
+            "content": "load_dotenv(os.path.join(BASE_DIR, \".env\"))"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 10,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 11,
+            "content": "TOKEN = os.getenv(\"GITHUB_TOKEN\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 12,
+            "content": "OWNER = os.getenv(\"OWNER\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 13,
+            "content": "REPO = os.getenv(\"REPO\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 14,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 15,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 16,
+            "content": "# Connect to GitHub"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 17,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 18,
+            "content": "g = Github(TOKEN)"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 19,
+            "content": "repo = g.get_repo(f\"{OWNER}/{REPO}\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 20,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 21,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 22,
+            "content": "# Read Previous Commit"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 23,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 24,
+            "content": "last_commit_file = os.path.join(BASE_DIR, \"reports\", \"last_commit.txt\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 25,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 26,
+            "content": "with open(last_commit_file, \"r\") as f:"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 27,
+            "content": "    previous_commit = f.read().strip()"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 28,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 29,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 30,
+            "content": "# Get Latest Commit"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 31,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 32,
+            "content": "latest_commit = repo.get_commits()[0].sha"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 33,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 34,
+            "content": "print(f\"Previous Commit : {previous_commit}\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 35,
+            "content": "print(f\"Latest Commit   : {latest_commit}\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 36,
+            "content": ""
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 37,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 38,
+            "content": "# Compare"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 39,
+            "content": "# -----------------------------"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 40,
+            "content": "if previous_commit == latest_commit:"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 41,
+            "content": "    print(\"\\nNo new commits found.\")"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 42,
+            "content": "else:"
+        },
+        {
+            "file": "scripts/compare_commits.py",
+            "type": "Added",
+            "line": 43,
+            "content": "    print(\"\\nNew commit detected!\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 1,
+            "content": "from github import Github"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 2,
+            "content": "from dotenv import load_dotenv"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 3,
+            "content": "import os"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 4,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 5,
+            "content": "# Load .env"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 6,
+            "content": "BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 7,
+            "content": "load_dotenv(os.path.join(BASE_DIR, \".env\"))"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 8,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 9,
+            "content": "TOKEN = os.getenv(\"GITHUB_TOKEN\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 10,
+            "content": "OWNER = os.getenv(\"OWNER\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 11,
+            "content": "REPO = os.getenv(\"REPO\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 12,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 13,
+            "content": "# Connect to GitHub"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 14,
+            "content": "g = Github(TOKEN)"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 15,
+            "content": "repo = g.get_repo(f\"{OWNER}/{REPO}\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 16,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 17,
+            "content": "# Fetch latest commits"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 18,
+            "content": "commits = repo.get_commits()"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 19,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 20,
+            "content": "print(\"=\" * 80)"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 21,
+            "content": "print(\"LATEST COMMITS\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 22,
+            "content": "print(\"=\" * 80)"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 23,
+            "content": ""
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 24,
+            "content": "for commit in commits[:10]:"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 25,
+            "content": "    print(f\"Commit SHA : {commit.sha}\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 26,
+            "content": "    print(f\"Author     : {commit.commit.author.name}\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 27,
+            "content": "    print(f\"Date       : {commit.commit.author.date}\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 28,
+            "content": "    print(f\"Message    : {commit.commit.message}\")"
+        },
+        {
+            "file": "scripts/fetch_commits.py",
+            "type": "Added",
+            "line": 29,
+            "content": "    print(\"-\" * 80)"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 1,
+            "content": "from github import Github"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 2,
+            "content": "from dotenv import load_dotenv"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 3,
+            "content": "import os"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 4,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 5,
+            "content": "# Load environment variables"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 6,
+            "content": "load_dotenv()"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 7,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 8,
+            "content": "# Read values from .env"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 9,
+            "content": "TOKEN = os.getenv(\"GITHUB_TOKEN\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 10,
+            "content": "OWNER = os.getenv(\"OWNER\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 11,
+            "content": "REPO = os.getenv(\"REPO\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 12,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 13,
+            "content": "# Check if token exists"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 14,
+            "content": "if not TOKEN:"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 15,
+            "content": "    raise Exception(\"GitHub token not found! Check your .env file.\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 16,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 17,
+            "content": "# Connect to GitHub"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 18,
+            "content": "g = Github(TOKEN)"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 19,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 20,
+            "content": "# Access the repository"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 21,
+            "content": "repo = g.get_repo(f\"{OWNER}/{REPO}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 22,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 23,
+            "content": "print(\"=\" * 50)"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 24,
+            "content": "print(\"\u2705 Connected to GitHub Successfully\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 25,
+            "content": "print(\"=\" * 50)"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 26,
+            "content": ""
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 27,
+            "content": "print(f\"Repository Name : {repo.name}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 28,
+            "content": "print(f\"Owner           : {repo.owner.login}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 29,
+            "content": "print(f\"Default Branch  : {repo.default_branch}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 30,
+            "content": "print(f\"Stars           : {repo.stargazers_count}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 31,
+            "content": "print(f\"Forks           : {repo.forks_count}\")"
+        },
+        {
+            "file": "scripts/github_client.py",
+            "type": "Added",
+            "line": 32,
+            "content": "print(f\"Open Issues     : {repo.open_issues_count}\")"
+        }
+    ]
+}
